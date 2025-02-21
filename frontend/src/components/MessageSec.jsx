@@ -5,6 +5,7 @@ import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import ChatContext from "../context/ChatContext";
 import { axiosInstance } from "../lib/axios";
+import { formatMessageTime } from "../lib/utils";
 
 export const MessageSec = () => {
   const [messageArr, setMessageArr] = useState([]);
@@ -148,17 +149,23 @@ export const MessageSec = () => {
             <Box sx={{ color: "#7D1C4A" }}>
               <PersonIcon />
             </Box>
-            <Box
+            <Box 
               sx={{
                 bgcolor: "#7D1C4A",
                 maxWidth: "120px",
                 py: 1,
                 borderRadius: 2,
                 px: 2,
+                display:"flex",
+                alignItems: "center",
+                gap:1
               }}
             >
               <Typography sx={{ color: "#F4CCE9", fontSize: "14px" }}>
                 {msg.text}
+              </Typography>
+              <Typography sx={{ color: "#F4CCE9", fontSize: "8px" }}>
+                {formatMessageTime(msg.createdAt)}
               </Typography>
             </Box>
           </Box>

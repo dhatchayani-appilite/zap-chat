@@ -6,12 +6,16 @@ import ChatContext from "../context/ChatContext";
 
 const Navbar = () => {
   const [isNavHidden, toggleNav] = useState(false);
-  const { setAuthUser, setSelectedUser } = useContext(ChatContext);
+  const { setAuthUser, setSelectedUser,socket } = useContext(ChatContext);
   const navigate = useNavigate();
   const onLogout = async () => {
     await axiosInstance.post("auth/logout");
     setAuthUser(null);
     setSelectedUser(null);
+    const disconnectSocket= () => {
+      if (socket?.connected) socket.disconnect();
+    }
+    disconnectSocket()
     navigate("/login", { replace: true });
   };
   return !isNavHidden ? (

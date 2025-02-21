@@ -1,13 +1,14 @@
 import { Box, Typography } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
+import CircleIcon from '@mui/icons-material/Circle';
 import React, { useContext, useEffect, useState } from "react";
 import { axiosInstance } from "../lib/axios";
 import ChatContext from "../context/ChatContext";
 
-const ChatSec = () => {
+const ChatSec = (props) => {
   const [usersdata, updateUsersData] = useState([]);
   const { setSelectedUser, authUser } = useContext(ChatContext);
-
+  const {onlineUsers} = props
   const getUsers = async () => {
     try {
       const res = await axiosInstance.get("/messages/users");
@@ -80,6 +81,9 @@ const ChatSec = () => {
               <Typography variant="h6" sx={{ color: "#7D1C4A" }}>
                 {user.username}
               </Typography>
+              <Box sx={{marginLeft:"auto",color:"green"}}>
+                {onlineUsers.includes(user._id)&&<CircleIcon />} 
+              </Box>
             </Box>
           </li>
         ))}

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import Navbar from "../components/Navbar";
 import { io } from "socket.io-client";
@@ -6,6 +6,7 @@ import Chat from "../components/Chat";
 import ChatContext from "../context/ChatContext";
 
 function Home() {
+  const [onlineUsers,setOnlineUsers] = useState([])
   const { authUser, establishSocket, socket } = useContext(ChatContext);
 
   const connectToSocket = () => {
@@ -16,6 +17,9 @@ function Home() {
       },
     });
     newSocket.connect();
+    newSocket.on("getOnlineUsers", (userIds) => {
+          setOnlineUsers(userIds)
+        });
     establishSocket(newSocket);
   };
 
@@ -25,7 +29,7 @@ function Home() {
   return (
     <Box sx={{ minHeight: "100vh" }}>
       <Navbar />
-      <Chat />
+      <Chat onlineUsers={onlineUsers}/>
     </Box>
   );
 }
