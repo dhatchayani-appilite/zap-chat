@@ -1,8 +1,11 @@
-import { Box, Typography } from "@mui/material";
-import React from "react";
+import { Box } from "@mui/material";
+import React, { useContext } from "react";
 import ChatSec from "./ChatSec";
+import ChatContext from "../context/ChatContext";
+import { MessageSec } from "./MessageSec";
 
 const Chat = () => {
+  const { selectedUser } = useContext(ChatContext);
   return (
     <Box
       sx={{
@@ -15,13 +18,13 @@ const Chat = () => {
       <Box
         sx={{
           width: "375px",
-          height: "90vh",
+          height: "600px",
           border: "1px solid #7D1C4A",
           borderRadius: 14,
           boxShadow: "0px 14px 20px 0px #D17D98",
         }}
       >
-        <ChatSec />
+        {!selectedUser ? <ChatSec /> : <MessageSec />}
       </Box>
     </Box>
   );

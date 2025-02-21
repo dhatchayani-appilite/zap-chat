@@ -8,6 +8,9 @@ import ChatContext from "./context/ChatContext";
 
 export default function App() {
   const [authUser, setAuthUser] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [socket, establishSocket] = useState(null);
+
   const checkAuth = async () => {
     try {
       const res = await axiosInstance.get("/auth/check");
@@ -19,11 +22,24 @@ export default function App() {
   };
   useEffect(() => {
     checkAuth();
-  }, []);
-  console.log(authUser);
+  }, [setAuthUser]);
+
+  // //debug context value here
+  // console.log(authUser);
+
   return (
     <BrowserRouter>
-      <ChatContext.Provider value= {{authUser}}>
+      <ChatContext.Provider
+        value={{
+          authUser,
+          selectedUser,
+          setSelectedUser,
+          socket,
+          establishSocket,
+          setAuthUser,
+          checkAuth,
+        }}
+      >
         <Routes>
           <Route
             path="/"

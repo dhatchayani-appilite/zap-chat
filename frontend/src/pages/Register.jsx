@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
 import Logo from "../assets/logo.svg";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { registerRoute } from "../utils/APIRoutes";
 import { axiosInstance } from "../lib/axios";
+import ChatContext from "../context/ChatContext";
 
 export default function Register() {
+  const {checkAuth } = useContext(ChatContext);
   const navigate = useNavigate();
   const toastOptions = {
     position: "bottom-right",
@@ -67,8 +67,9 @@ export default function Register() {
           password,
         });
         console.log (response.data)
+        checkAuth()
         navigate("/");
-        navigate(0)
+        
         
       } catch (error) {
         console.log(error) 

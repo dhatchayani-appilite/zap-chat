@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
 import Logo from "../assets/logo.svg";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { loginRoute } from "../utils/APIRoutes";
 import { axiosInstance } from "../lib/axios";
+import ChatContext from "../context/ChatContext";
 
 export default function Login() {
   const navigate = useNavigate();
+  const { authUser, checkAuth } = useContext(ChatContext);
   const [values, setValues] = useState({ username: "", password: "" });
   const toastOptions = {
     position: "bottom-right",
@@ -18,7 +18,6 @@ export default function Login() {
     draggable: true,
     theme: "dark",
   };
-
 
   const handleChange = (event) => {
     setValues({ ...values, [event.target.name]: event.target.value });
@@ -39,27 +38,36 @@ export default function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (validateForm()) {
-      const { username, password } = values;
-      const response = await axiosInstance.post("auth/login", {
-        username,
-        password,
-      });
-      console.log(response)
-      navigate("/",{replace :true});
-      navigate(0)
-    //   if (data.status === false) {
-    //     toast.error(data.msg, toastOptions);
-    //   }
-    //   if (data.status === true) {
-    //     localStorage.setItem(
-    //       process.env.REACT_APP_LOCALHOST_KEY,
-    //       JSON.stringify(data.user)
-    //     );
+      try {
+        const { username, password } = values;
+        await axiosInstance.post("auth/login", {
+          username,
+          password,
+        });
+        checkAuth();
+        console.log(authUser);
 
-    //     navigate("/");
-    //   }
-    // }
-  }}
+        navigate("/", { replace: true });
+      } catch (error) {
+        console.log(error.response.data.message);
+        toast.error(error.response.data.message);
+      }
+
+      // navigate(0);
+      //   if (data.status === false) {
+      //     toast.error(data.msg, toastOptions);
+      //   }
+      //   if (data.status === true) {
+      //     localStorage.setItem(
+      //       process.env.REACT_APP_LOCALHOST_KEY,
+      //       JSON.stringify(data.user)
+      //     );
+
+      //     navigate("/");
+      //   }
+      // }
+    }
+  };
 
   return (
     <>
